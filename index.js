@@ -4,10 +4,13 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const authRoute = require("./routes/auth-route");
 const profileRoute = require("./routes/profile-route");
+const session = require("express-session");
+const passport = require("passport");
 const port = 8080;
 dotenv.config();
 require("./config/passport");
 
+//database
 mongoose
   .connect(process.env.DB_CONNECT, {
     useNewUrlParser: true,
@@ -19,10 +22,21 @@ mongoose
   .catch((err) => {
     console.log("Connection Error", err);
   });
+
 //middleware
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use("/auth", authRoute);
 app.use("/profile", profileRoute);
 
