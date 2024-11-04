@@ -5,9 +5,9 @@ const dotenv = require("dotenv");
 const authRoute = require("./routes/auth-route");
 const profileRoute = require("./routes/profile-route");
 const session = require("express-session");
-const passport = require("passport");
 const port = 8080;
 dotenv.config();
+const passport = require("passport");
 require("./config/passport");
 
 //database

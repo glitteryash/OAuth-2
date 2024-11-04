@@ -9,10 +9,14 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((_id, done) => {
   console.log("Deserializing user now");
-  User.findById({ _id }).then((user) => {
-    console.log("Found user");
-    done(null, user);
-  });
+  User.findById({ _id })
+    .then((user) => {
+      console.log("Found user");
+      done(null, user);
+    })
+    .catch((err) => {
+      console.error(`Error finding user:`, err);
+    });
 });
 
 passport.use(
