@@ -41,7 +41,7 @@ app.use("/auth", authRoute);
 app.use("/profile", profileRoute);
 
 app.get("/", (req, res) => {
-  res.render("index.ejs");
+  res.render("index.ejs", { user: req.user });
 });
 
 app.listen(port, () => {
