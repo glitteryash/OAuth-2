@@ -9,6 +9,7 @@ const port = 8080;
 dotenv.config();
 const passport = require("passport");
 require("./config/passport");
+const flash = require("connect-flash");
 
 //database
 mongoose
@@ -37,6 +38,12 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  next();
+});
 app.use("/auth", authRoute);
 app.use("/profile", profileRoute);
 
