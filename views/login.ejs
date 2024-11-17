@@ -27,6 +27,7 @@
       <br />
       <h4>Or... you have an account. Login here:</h4>
       <form action="/auth/login" method="POST">
+        <%- include ("partials/message") %>
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input
@@ -54,7 +55,6 @@
         </div>
         <br />
         <button class="btn btn-primary">Submit</button>
-        <%- include ("partials/message") %>
       </form>
     </main>
   </body>

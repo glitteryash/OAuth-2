@@ -7,6 +7,24 @@
   <body>
     <%- include ("partials/nav") %>
     <main style="padding: 3rem">
+      <div class="row">
+        <div ass="col-md-12">
+          <a
+            class="btn btn-lg btn-google"
+            style="
+              padding: 0.2rem 0.5rem;
+              background-color: rgb(7, 7, 7);
+              color: rgb(255, 255, 255);
+            "
+            href="/auth/google"
+            ><img
+              src="https://img.icons8.com/color/16/000000/google-logo.png"
+            />
+            Signup with Google</a
+          >
+        </div>
+      </div>
+      <br />
       <form action="/auth/signup" method="POST">
         <%- include ("partials/message") %>
         <div class="form-group">

@@ -13,7 +13,7 @@ router.post("/signup", async (req, res) => {
   const emailExist = await User.findOne({ email });
   if (emailExist) {
     req.flash("error_msg", "Email has already been registered.");
-    res.redirect("/auth/signup");
+    return res.redirect("/auth/signup");
   }
 
   const hash = await bcrypt.hash(password, 10);
