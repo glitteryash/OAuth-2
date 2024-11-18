@@ -33,6 +33,17 @@ router.get("/login", (req, res) => {
   res.render("login", { user: req.user });
 });
 
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/auth/login",
+    failureFlash: true,
+  }),
+  (req, res) => {
+    res.redirect("/profile");
+  }
+);
+
 router.get("/logout", (req, res) => {
   req.logOut((err) => {
     if (err) {

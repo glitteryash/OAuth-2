@@ -23,18 +23,31 @@ passport.deserializeUser((_id, done) => {
 
 passport.use(
   new LocalStrategy((username, password, done) => {
-    console.log(username, password);
-    User.findOne({ email: username }).then((user) => {
-      if (!user) {
-        return done(null, false);
-      }
-      bcrypt.compare(password, user.password, function (err, result) {
-        if (!result) {
-          return done(null, false);
+    console.log("Authenticating:", username);
+    User.findOne({ email: username })
+      .then((user) => {
+        if (!user) {
+          return done(null, false, {
+            message: "Invalid username or password.",
+          });
         }
-        return done(null, user);
+        bcrypt.compare(password, user.password, function (err, result) {
+          // if (err) {
+          //   console.error("Error comparing password:", err);
+          //   return done(err);
+          // }
+          if (!result) {
+            return done(null, false, {
+              message: "Invalid username or password.",
+            });
+          }
+          return done(null, user);
+        });
+      })
+      .catch((err) => {
+        console.error("Database error", err);
+        return done(null, false);
       });
-    });
   })
 );
 

@@ -1,3 +1,11 @@
+<% if (error!=""){ %>
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong><%= error %></strong>
+</div>
+<% } %>
+
+<!--break-->
+
 <% if (error_msg!=""){ %>
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
   <strong><%= error_msg %></strong>
