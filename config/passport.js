@@ -32,10 +32,10 @@ passport.use(
           });
         }
         bcrypt.compare(password, user.password, function (err, result) {
-          // if (err) {
-          //   console.error("Error comparing password:", err);
-          //   return done(err);
-          // }
+          if (err) {
+            console.error("Error comparing password:", err);
+            return done(err);
+          }
           if (!result) {
             return done(null, false, {
               message: "Invalid username or password.",
