@@ -9,8 +9,9 @@ const authCheck = (req, res, next) => {
   }
 };
 
-router.get("/", authCheck, (req, res) => {
-  res.render("profile", { user: req.user });
+router.get("/", authCheck, async (req, res) => {
+  let postFound = await Post.find({ author: req.user._id });
+  res.render("profile", { user: req.user, posts: postFound });
 });
 
 router.get("/post", authCheck, (req, res) => {
@@ -24,7 +25,7 @@ router.post("/post", authCheck, async (req, res) => {
     await newPost.save();
     res.status(200).redirect("/profile");
   } catch (err) {
-    req.flash("error.msg", "Both title and content are required.");
+    req.flash("error_msg", "Both title and content are required.");
     res.redirect("/profile/post");
   }
 });
