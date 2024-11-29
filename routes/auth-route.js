@@ -40,7 +40,33 @@ router.post(
     failureFlash: true,
   }),
   (req, res) => {
-    res.redirect("/profile");
+    console.log("Login Successful");
+    console.log("Full Session before redirect: ", req.session);
+
+    // 儲存 returnTo 到 session，然後刪除它以避免後續操作時再次被覆蓋
+    const returnTo = req.session.returnTo;
+    delete req.session.returnTo;
+
+    // 確保 session 儲存
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.redirect("/profile");
+      }
+
+      // 只有在 returnTo 存在的情況下才重定向
+      const returnTo = req.session.returnTo;
+      delete req.session.returnTo; // 完成後清理 returnTo
+
+      if (returnTo) {
+        console.log(`Redirecting to: ${returnTo}`);
+        res.redirect(returnTo);
+      } else {
+        // 如果 returnTo 不存在，可以選擇不進行重定向，或顯示一個預設頁面
+        console.log("No returnTo, redirect to the homepage.");
+        res.redirect("/"); // 可以修改為其他您想要的頁面
+      }
+    });
   }
 );
 
@@ -59,7 +85,13 @@ router.get(
   })
 );
 router.get("/google/redirect", passport.authenticate("google"), (req, res) => {
-  res.redirect("/profile");
+  if (req.session.returnTo) {
+    let newPath = req.session.returnTo;
+    req.session.returnTo = "";
+    res.redirect(newPath);
+  } else {
+    res.redirect("/profile");
+  }
 });
 
 module.exports = router;

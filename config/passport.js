@@ -5,19 +5,20 @@ const LocalStrategy = require("passport-local");
 const bcrypt = require("bcrypt");
 
 passport.serializeUser((user, done) => {
-  console.log(`Serializaing user now`);
+  console.log(`Serializing user now`);
   done(null, user._id);
 });
 
 passport.deserializeUser((_id, done) => {
   console.log("Deserializing user now");
-  User.findById({ _id })
+  User.findById(_id)
     .then((user) => {
-      console.log("Found user");
+      console.log("Found user:", user); // 確認找到了用戶
       done(null, user);
     })
     .catch((err) => {
-      console.error(`Error finding user:`, err);
+      console.error("Error finding user:", err);
+      done(err, null);
     });
 });
 

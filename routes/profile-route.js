@@ -2,6 +2,23 @@ const router = require("express").Router();
 const Post = require("../models/post-model");
 
 const authCheck = (req, res, next) => {
+  console.log("Middleware Start - Original URL: ", req.originalUrl);
+  console.log("Current Session Before Check: ", req.session);
+
+  // 在每次未認證的請求中，強制設置和保存 returnTo
+  if (!req.isAuthenticated() && req.originalUrl !== "/auth/login") {
+    req.session.returnTo = req.originalUrl;
+
+    // 立即保存 session
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error in authCheck:", err);
+      }
+      console.log("Saved returnTo in authCheck: ", req.session.returnTo);
+      console.log("Session after saving returnTo: ", req.session);
+    });
+  }
+
   if (!req.isAuthenticated()) {
     res.redirect("/auth/login");
   } else {
@@ -29,4 +46,5 @@ router.post("/post", authCheck, async (req, res) => {
     res.redirect("/profile/post");
   }
 });
+
 module.exports = router;
